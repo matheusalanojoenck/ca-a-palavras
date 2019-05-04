@@ -54,26 +54,32 @@ public class Board {
     private void setLocation(String word, int orientation){
         Boolean valid;
         switch (orientation){
-            case 0:
+            case 0: //Palavra na horizontal
                 do{
-                    X = ThreadLocalRandom.current().nextInt(0, DIMENSION - word.length());
-                    Y = ThreadLocalRandom.current().nextInt(0, DIMENSION);
+                    //Caso a palavra seja do tamanho da matriz começar o X em 0;
+                    if(word.length() == DIMENSION) X = 0; else X = ThreadLocalRandom.current().nextInt(0, DIMENSION);
+                    Y = ThreadLocalRandom.current().nextInt(0, DIMENSION - word.length());
                     valid = isPositionValid(word, X, Y, orientation);
 
                 }while(!valid);
                 break;
-            case 1:
+
+            case 1: //Palavra na vertical
                 do{
                     X = ThreadLocalRandom.current().nextInt(0, DIMENSION);
-                    Y = ThreadLocalRandom.current().nextInt(0, DIMENSION - word.length());
+                    //Caso a palavra seja do tamanho da matriz começar o Y em 0;
+                    if(word.length() == DIMENSION) Y = 0; else Y = ThreadLocalRandom.current().nextInt(0, DIMENSION - word.length());
                     valid = isPositionValid(word, X, Y, orientation);
+
                 }while(!valid);
                 break;
-            case 2:
+            case 2: //Palavra da diagonal
                 do{
-                    X = ThreadLocalRandom.current().nextInt(0, DIMENSION - word.length());
-                    Y = ThreadLocalRandom.current().nextInt(0, DIMENSION - word.length());
-                    valid = isPositionValid(word, X, Y, orientation);
+                    //Caso a palavra seja do tamanho da matriz começar o X e Y em 0;
+                    //TODO: possibilitar a diagonal secundaria, por enquanto a diagonal vai da esquerda para direita
+                    if(word.length() == DIMENSION) X = 0; else X = ThreadLocalRandom.current().nextInt(0, DIMENSION - word.length());
+                    if(word.length() == DIMENSION) Y = 0; else Y = ThreadLocalRandom.current().nextInt(0, DIMENSION - word.length());
+                        valid = isPositionValid(word, X, Y, orientation);
                 }while(!valid);
                 break;
         }
@@ -133,6 +139,8 @@ public class Board {
         }
     }
 
+
+    //TODO: possibilitar a diagonal secundaria, por enquanto a diagonal vai da esquerda para direita | Talvez criar um novo metodo para a diagonal secundaria
     private void placeDiagonal(String word, int x, int y){
         for (int i = 0; i < word.length(); i++) {
             grid[x][y] = word.charAt(i);
