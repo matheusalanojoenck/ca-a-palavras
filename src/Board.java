@@ -6,7 +6,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Board {
     private int DIMENSION;
     private char[][] grid;
-    int X, Y;
+    private int X, Y;
 
     public Board(int dimension, ArrayList<String> wordColletion){
         DIMENSION = dimension;
@@ -16,12 +16,15 @@ public class Board {
         showBoard();
     }
 
+    public char[][] getGrid(){
+        return grid;
+    }
+
     private void fillEmptySpace(){
         Random random = new Random();
         for (int i = 0; i < DIMENSION; i++) {
             for (int j = 0; j < DIMENSION; j++) {
-
-                //grid[i][j] = (char)ThreadLocalRandom.current().nextInt(65, 91);
+                //gridButton[i][j] = (char)ThreadLocalRandom.current().nextInt(65, 91);
                 if(grid[i][j] == 0) grid[i][j] = '.';
             }
         }
@@ -57,8 +60,8 @@ public class Board {
             case 0: //Palavra na horizontal
                 do{
                     //Caso a palavra seja do tamanho da matriz começar o X em 0;
-                    if(word.length() == DIMENSION) X = 0; else X = ThreadLocalRandom.current().nextInt(0, DIMENSION);
-                    Y = ThreadLocalRandom.current().nextInt(0, DIMENSION - word.length());
+                    if(word.length() == DIMENSION) X = 0; else X = ThreadLocalRandom.current().nextInt(0, DIMENSION  - word.length());
+                    Y = ThreadLocalRandom.current().nextInt(0, DIMENSION);
                     valid = isPositionValid(word, X, Y, orientation);
 
                 }while(!valid);
