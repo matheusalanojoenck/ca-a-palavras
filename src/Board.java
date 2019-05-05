@@ -31,17 +31,17 @@ public class Board {
     }
 
     private void placeWord( ArrayList<String> wordColletion){
-        for (String word : wordColletion) {
+        for (String originalWord : wordColletion) {
             int orientation = getOrientation();
+            String word = reverseWord(originalWord);
             setLocation(word, orientation);
             placeWordUtil(word, orientation);
         }
 
     }
 
-    private void placeWordUtil(String originalWord, int orientation){
-        String word = reverseWord(originalWord);
-        System.out.printf("wordOriginal: %s | word: %s | orientarion: %d\n", originalWord, word, orientation);
+    private void placeWordUtil(String word, int orientation){
+        System.out.printf("word: %s | orientarion: %d\n", word, orientation);
         switch (orientation){
             case 0:
                 placeHorizontal(word, X, Y);
@@ -97,14 +97,13 @@ public class Board {
                 break;
         }
     }
-
-    //TODO: Verificar se tem intercecção, caso não tenha, a posição é valida, caso tenha intercecção verfircar se a letra "nos pontos" (mais de ponto de encontro) são iguais. Caso diferentes return false, else return true;
+    
     private boolean isPositionValid(String word, int x, int y, int orientation){
         switch (orientation){
             case 0:
                 for (int i = 0; i < word.length(); i++) {
                     System.out.printf("wrod: %s | grid[x][y] = %c | word.charAt(i) = %c\n",word, grid[x][y], word.charAt(i));
-                    if((grid[x][y] != 0) && grid[x][y] != word.charAt(i)){
+                    if((grid[x][y] != 0) && (grid[x][y] != word.charAt(i))){
                         System.out.printf("word: %s invalida\n", word);
                         return false;
                     }
@@ -114,7 +113,7 @@ public class Board {
             case 1:
                 for (int i = 0; i < word.length(); i++) {
                     System.out.printf("wrod: %s | grid[x][y] = %c | word.charAt(i) = %c\n",word, grid[x][y], word.charAt(i));
-                    if((grid[x][y] != 0) && grid[x][y] != word.charAt(i)){
+                    if((grid[x][y] != 0) && (grid[x][y] != word.charAt(i))){
                         System.out.printf("word: %s invalida\n", word);
                         return false;
                     }
