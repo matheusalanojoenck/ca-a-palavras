@@ -8,7 +8,7 @@ public class Board {
     private char[][] grid;
     private int X, Y;
 
-    public Board(int dimension, ArrayList<String> wordColletion){
+    Board(int dimension, ArrayList<String> wordColletion){
         DIMENSION = dimension;
         grid = new char[DIMENSION][DIMENSION];// Cada posição é iniciada com 0;
         placeWord(wordColletion);
@@ -68,7 +68,7 @@ public class Board {
 
     //Define o range em que as palavras podem ser colocadas paseado no tamanho da palavra e no tamnho da matriz
     private void setLocation(String word, int orientation){
-        Boolean valid;
+        boolean valid;
         switch (orientation){
             case 0: //Palavra na horizontal
                 do{
