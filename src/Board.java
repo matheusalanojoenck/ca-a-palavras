@@ -16,10 +16,13 @@ public class Board {
         showBoard();
     }
 
+
+    //Retorna a matriz que representa o board
     public char[][] getGrid(){
         return grid;
     }
 
+    //Preenche os espaços vazios da matriz com letras aleatorias
     private void fillEmptySpace(){
         Random random = new Random();
         for (int i = 0; i < DIMENSION; i++) {
@@ -30,6 +33,11 @@ public class Board {
         }
     }
 
+
+    //Metodo inicial que recebe a lista de palavras a serem inseridas na matriz
+    //Organiza a orientação da palavra (com o metodo getOrientation) e se ira ser invertidada (com o metodo reverseWord)
+    //Verifica se a posição é valida, com setLocation
+    //Por fim coloca a palavra da matriz
     private void placeWord( ArrayList<String> wordColletion){
         for (String originalWord : wordColletion) {
             int orientation = getOrientation();
@@ -40,8 +48,8 @@ public class Board {
 
     }
 
+    //Chama o motedo de acordo a a orientação passada no argumento para colocar a palavra na matriz
     private void placeWordUtil(String word, int orientation){
-        System.out.printf("word: %s | orientarion: %d\n", word, orientation);
         switch (orientation){
             case 0:
                 placeHorizontal(word, X, Y);
@@ -58,6 +66,7 @@ public class Board {
         }
     }
 
+    //Define o range em que as palavras podem ser colocadas paseado no tamanho da palavra e no tamnho da matriz
     private void setLocation(String word, int orientation){
         Boolean valid;
         switch (orientation){
@@ -97,14 +106,12 @@ public class Board {
                 break;
         }
     }
-    
+
     private boolean isPositionValid(String word, int x, int y, int orientation){
         switch (orientation){
             case 0:
                 for (int i = 0; i < word.length(); i++) {
-                    System.out.printf("wrod: %s | grid[x][y] = %c | word.charAt(i) = %c\n",word, grid[x][y], word.charAt(i));
                     if((grid[x][y] != 0) && (grid[x][y] != word.charAt(i))){
-                        System.out.printf("word: %s invalida\n", word);
                         return false;
                     }
                     x++;
@@ -112,9 +119,7 @@ public class Board {
                 break;
             case 1:
                 for (int i = 0; i < word.length(); i++) {
-                    System.out.printf("wrod: %s | grid[x][y] = %c | word.charAt(i) = %c\n",word, grid[x][y], word.charAt(i));
                     if((grid[x][y] != 0) && (grid[x][y] != word.charAt(i))){
-                        System.out.printf("word: %s invalida\n", word);
                         return false;
                     }
                     y++;
@@ -122,9 +127,7 @@ public class Board {
                 break;
             case 2:
                 for (int i = 0; i < word.length(); i++) {
-                    System.out.printf("wrod: %s | grid[x][y] = %c | word.charAt(i) = %c\n",word, grid[x][y], word.charAt(i));
                     if((grid[x][y] != 0) && (grid[x][y] != word.charAt(i))){
-                        System.out.printf("word: %s invalida\n", word);
                         return false;
                     }
                     x++;
@@ -133,9 +136,7 @@ public class Board {
                 break;
             case 3:
                 for (int i = 0; i < word.length(); i++) {
-                    System.out.printf("wrod: %s | grid[x][y] = %c | word.charAt(i) = %c\n",word, grid[x][y], word.charAt(i));
                     if((grid[x][y] != 0) && (grid[x][y] != word.charAt(i))){
-                        System.out.printf("word: %s invalida\n", word);
                         return false;
                     }
                     x--;
@@ -150,11 +151,21 @@ public class Board {
         return true;
     }
 
-    //Orientação da palavra, 0 - horizontal | 1 - vertical | 2 - diagonal | 3 - diagonal secundaria
+    //Define a orientação da palavra, 0 - horizontal | 1 - vertical | 2 - diagonal | 3 - diagonal secundaria
     private int getOrientation(){
         return ThreadLocalRandom.current().nextInt(0, 4);
     }
 
+
+    //Coloca a string na posição horizontal dada uma posição inicial
+    /*
+     * * * * * * * * *
+     * S T R I N G * *
+     * * * * * * * * *
+     * * * * * * * * *
+     * * * * * * * * *
+     * * * * * * * * *
+     */
     private void placeHorizontal(String word, int x, int y){
         for (int i = 0; i < word.length(); i++) {
             grid[x][y] = word.charAt(i);
@@ -162,12 +173,32 @@ public class Board {
         }
     }
 
+
+    //Coloca a string na posição vertical dada uma posição inicial
+    /*
+         * * * S * * * * *
+         * * * T * * * * *
+         * * * R * * * * *
+         * * * I * * * * *
+         * * * N * * * * *
+         * * * G * * * * *
+     */
     private void placeVertical(String word, int x, int y){
         for (int i = 0; i < word.length(); i++) {
             grid[x][y] = word.charAt(i);
             y++;
         }
     }
+
+    //Dada uma posição colocar a string na matriz 'grid' no formato de diagonal principal
+    /*
+         * S * * * * * * *
+         * * T * * * * * *
+         * * * R * * * * *
+         * * * * I * * * *
+         * * * * * N * * *
+         * * * * * * G * *
+     */
 
     private void placeDiagonal(String word, int x, int y){
         for (int i = 0; i < word.length(); i++) {
@@ -177,6 +208,15 @@ public class Board {
         }
     }
 
+    //Dada uma posição colocar a string na matriz 'grid' no formato de diagonal secundaria
+    /*
+        * * * * * * * S *
+        * * * * * * T * *
+        * * * * * R * * *
+        * * * * I * * * *
+        * * * N * * * * *
+        * * G * * * * * *
+     */
     private void placeSecondaryDiagonal(String word, int x, int y){
         for (int i = 0; i < word.length(); i++) {
             grid[x][y] = word.charAt(i);
@@ -185,6 +225,7 @@ public class Board {
         }
     }
 
+    //Define se a string recebida vai ser invertida, e retorna a string (invertida ou não, 50% de chance)
     private String reverseWord(String word){
         int reverse = ThreadLocalRandom.current().nextInt(0, 2);
 
@@ -192,6 +233,7 @@ public class Board {
         else return new StringBuilder(word).reverse().toString();
     }
 
+    //Mostra a matriz no console
     private void showBoard(){
         for (int i = 0; i < DIMENSION; i++) {
             System.out.println(Arrays.toString(grid[i]));
