@@ -7,6 +7,9 @@ public class Game{
         wordCollection.add("AGUA");
         wordCollection.add("CAFE");
         wordCollection.add("CELULAR");
+        wordCollection.add("CAIXA");
+        wordCollection.add("MONITOR");
+        wordCollection.add("CADEIRA");
 
         Board board = new Board(15, wordCollection);
     }

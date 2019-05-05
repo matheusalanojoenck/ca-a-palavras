@@ -25,7 +25,7 @@ public class Board {
         for (int i = 0; i < DIMENSION; i++) {
             for (int j = 0; j < DIMENSION; j++) {
                 //gridButton[i][j] = (char)ThreadLocalRandom.current().nextInt(65, 91);
-                if(grid[i][j] == 0) grid[i][j] = '.';
+                if(grid[i][j] == 0) grid[i][j] = ' ';
             }
         }
     }
@@ -41,6 +41,7 @@ public class Board {
 
     private void placeWordUtil(String originalWord, int orientation){
         String word = reverseWord(originalWord);
+        System.out.printf("wordOriginal: %s | word: %s | orientarion: %d\n", originalWord, word, orientation);
         switch (orientation){
             case 0:
                 placeHorizontal(word, X, Y);
@@ -50,6 +51,9 @@ public class Board {
                 break;
             case 2:
                 placeDiagonal(word, X, Y);
+                break;
+            case 3:
+                placeSecondaryDiagonal(word, X, Y);
                 break;
         }
     }
@@ -79,20 +83,29 @@ public class Board {
             case 2: //Palavra da diagonal
                 do{
                     //Caso a palavra seja do tamanho da matriz começar o X e Y em 0;
-                    //TODO: possibilitar a diagonal secundaria, por enquanto a diagonal vai da esquerda para direita
                     if(word.length() == DIMENSION) X = 0; else X = ThreadLocalRandom.current().nextInt(0, DIMENSION - word.length());
                     if(word.length() == DIMENSION) Y = 0; else Y = ThreadLocalRandom.current().nextInt(0, DIMENSION - word.length());
-                        valid = isPositionValid(word, X, Y, orientation);
+                    valid = isPositionValid(word, X, Y, orientation);
+                }while(!valid);
+                break;
+            case 3: //Palavra na diagonal secundaria
+                do {
+                    if(word.length() == DIMENSION) X = DIMENSION - 1; else X = ThreadLocalRandom.current().nextInt(DIMENSION - word.length(), DIMENSION);
+                    if(word.length() == DIMENSION) Y = DIMENSION - 1; else Y = ThreadLocalRandom.current().nextInt(0, DIMENSION - word.length());
+                    valid = isPositionValid(word, X, Y, orientation);
                 }while(!valid);
                 break;
         }
     }
 
+    //TODO: Verificar se tem intercecção, caso não tenha, a posição é valida, caso tenha intercecção verfircar se a letra "nos pontos" (mais de ponto de encontro) são iguais. Caso diferentes return false, else return true;
     private boolean isPositionValid(String word, int x, int y, int orientation){
         switch (orientation){
             case 0:
                 for (int i = 0; i < word.length(); i++) {
+                    System.out.printf("wrod: %s | grid[x][y] = %c | word.charAt(i) = %c\n",word, grid[x][y], word.charAt(i));
                     if((grid[x][y] != 0) && grid[x][y] != word.charAt(i)){
+                        System.out.printf("word: %s invalida\n", word);
                         return false;
                     }
                     x++;
@@ -100,7 +113,9 @@ public class Board {
                 break;
             case 1:
                 for (int i = 0; i < word.length(); i++) {
+                    System.out.printf("wrod: %s | grid[x][y] = %c | word.charAt(i) = %c\n",word, grid[x][y], word.charAt(i));
                     if((grid[x][y] != 0) && grid[x][y] != word.charAt(i)){
+                        System.out.printf("word: %s invalida\n", word);
                         return false;
                     }
                     y++;
@@ -108,10 +123,23 @@ public class Board {
                 break;
             case 2:
                 for (int i = 0; i < word.length(); i++) {
+                    System.out.printf("wrod: %s | grid[x][y] = %c | word.charAt(i) = %c\n",word, grid[x][y], word.charAt(i));
                     if((grid[x][y] != 0) && (grid[x][y] != word.charAt(i))){
+                        System.out.printf("word: %s invalida\n", word);
                         return false;
                     }
                     x++;
+                    y++;
+                }
+                break;
+            case 3:
+                for (int i = 0; i < word.length(); i++) {
+                    System.out.printf("wrod: %s | grid[x][y] = %c | word.charAt(i) = %c\n",word, grid[x][y], word.charAt(i));
+                    if((grid[x][y] != 0) && (grid[x][y] != word.charAt(i))){
+                        System.out.printf("word: %s invalida\n", word);
+                        return false;
+                    }
+                    x--;
                     y++;
                 }
                 break;
@@ -123,9 +151,9 @@ public class Board {
         return true;
     }
 
-    //Orientação da palavra, 0 - horizontal | 1 - vertical | 2 - diagonal
+    //Orientação da palavra, 0 - horizontal | 1 - vertical | 2 - diagonal | 3 - diagonal secundaria
     private int getOrientation(){
-        return ThreadLocalRandom.current().nextInt(0, 3);
+        return ThreadLocalRandom.current().nextInt(0, 4);
     }
 
     private void placeHorizontal(String word, int x, int y){
@@ -142,12 +170,18 @@ public class Board {
         }
     }
 
-
-    //TODO: possibilitar a diagonal secundaria, por enquanto a diagonal vai da esquerda para direita | Talvez criar um novo metodo para a diagonal secundaria
     private void placeDiagonal(String word, int x, int y){
         for (int i = 0; i < word.length(); i++) {
             grid[x][y] = word.charAt(i);
             x++;
+            y++;
+        }
+    }
+
+    private void placeSecondaryDiagonal(String word, int x, int y){
+        for (int i = 0; i < word.length(); i++) {
+            grid[x][y] = word.charAt(i);
+            x--;
             y++;
         }
     }
