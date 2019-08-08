@@ -4,9 +4,9 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Board {
-    private int DIMENSION;
+    private int DIMENSION;//Tamanho do tabuleiro
     private char[][] grid;
-    private int X, Y;
+    private int X, Y;//Posição inicial da palavra, para cada palavra X e Y são atulizados
 
     Board(int dimension, ArrayList<String> wordColletion){
         DIMENSION = dimension;
@@ -16,28 +16,35 @@ public class Board {
         showBoard();
     }
 
-
-    //Retorna a matriz que representa o board
+    /**
+     * Retorna a matriz que representa o board
+     * @return a matriz que representa o tabuleiro
+     */
     public char[][] getGrid(){
         return grid;
     }
 
-    //Preenche os espaços vazios da matriz com letras aleatorias
+    /**
+     * Preenche os espaços vazios da matriz com letras aleatorias
+     */
     private void fillEmptySpace(){
         Random random = new Random();
         for (int i = 0; i < DIMENSION; i++) {
             for (int j = 0; j < DIMENSION; j++) {
-                //gridButton[i][j] = (char)ThreadLocalRandom.current().nextInt(65, 91);
-                if(grid[i][j] == 0) grid[i][j] = ' ';
+                if(grid[i][j] == 0) grid[i][j] = ' ';// Agora preenche com um espaço vazio para questoes de teste e visualização
+                //Descomentar a linha de baixo para colocar letras aleatorias
+                //if(grid[i][j] == 0) gridButton[i][j] = (char)ThreadLocalRandom.current().nextInt(65, 91);
             }
         }
     }
 
-
-    //Metodo inicial que recebe a lista de palavras a serem inseridas na matriz
-    //Organiza a orientação da palavra (com o metodo getOrientation) e se ira ser invertidada (com o metodo reverseWord)
-    //Verifica se a posição é valida, com setLocation
-    //Por fim coloca a palavra da matriz
+    /**
+     * Metodo inicial que recebe a lista de palavras a serem inseridas na matriz
+     * Organiza a orientação da palavra (com o metodo getOrientation) e se ira ser invertidada (com o metodo reverseWord)
+     * Verifica se a posição é valida, com setLocation
+     * Por fim coloca a palavra da matriz
+     * @param wordColletion lista que palavras que vão ser adicionadas no tabuleiro
+     */
     private void placeWord( ArrayList<String> wordColletion){
         for (String originalWord : wordColletion) {
             int orientation = getOrientation();
@@ -48,7 +55,11 @@ public class Board {
 
     }
 
-    //Chama o motedo de acordo a a orientação passada no argumento para colocar a palavra na matriz
+    /**
+     * Chama o motedo de acordo com a orientação passada no argumento para colocar a palavra na matriz
+     * @param word palavra que vai ser adicionada
+     * @param orientation orientação da palavra em releção ao tabuleiro
+     */
     private void placeWordUtil(String word, int orientation){
         switch (orientation){
             case 0:
@@ -66,7 +77,13 @@ public class Board {
         }
     }
 
-    //Define o range em que as palavras podem ser colocadas paseado no tamanho da palavra e no tamnho da matriz
+    //
+
+    /**
+     * Define o local em que as palavras podem ser colocadas baseado no tamanho da palavra e no tamnho da matriz
+     * @param word a palavra que vai ser adionada
+     * @param orientation a orientação da palavra em relação ao tabuleiro
+     */
     private void setLocation(String word, int orientation){
         boolean valid;
         switch (orientation){
@@ -107,10 +124,21 @@ public class Board {
         }
     }
 
+    /**
+     * Verifica se a posição da palavra é valida, verificando se a nova palavra não esta substituindo nenhuma letra das palavras anteriores
+     * @param word a palavra que vai ser adicionada
+     * @param x posição X da palavra no tabuleiro
+     * @param y posição Y da palavra no tabuleiro
+     * @param orientation qual a orientação da palavra( horizontal, vertical ou diagonal), gerado pelo metodo getOrientation()
+     * @return true caso a posição seja valida ou false caso a posição não seja valida
+     */
     private boolean isPositionValid(String word, int x, int y, int orientation){
         switch (orientation){
             case 0:
                 for (int i = 0; i < word.length(); i++) {
+                    //Se a posição em que a letra vai ser colocada for diferente de 0(vazio)
+                    //E se a letra for diferente que vai ser colocada é diferente da letra que já esta na posição, então retorna false
+                    //A mesma logica se aplica nas verificações posteriores
                     if((grid[x][y] != 0) && (grid[x][y] != word.charAt(i))){
                         return false;
                     }
@@ -151,20 +179,27 @@ public class Board {
         return true;
     }
 
-    //Define a orientação da palavra, 0 - horizontal | 1 - vertical | 2 - diagonal | 3 - diagonal secundaria
+
+
+    /**
+     * Define a orientação da palavra, 0 - horizontal | 1 - vertical | 2 - diagonal | 3 - diagonal secundaria
+     * @return retorna um numero inteiro entre 0 e 4
+     */
     private int getOrientation(){
         return ThreadLocalRandom.current().nextInt(0, 4);
     }
 
-
-    //Coloca a string na posição horizontal dada uma posição inicial
-    /*
-     * * * * * * * * *
-     * S T R I N G * *
-     * * * * * * * * *
-     * * * * * * * * *
-     * * * * * * * * *
-     * * * * * * * * *
+    /**
+     * Coloca a string na posição horizontal dada uma posição inicial
+     *      * * * * * * * * *
+     *      * S T R I N G * *
+     *      * * * * * * * * *
+     *      * * * * * * * * *
+     *      * * * * * * * * *
+     *      * * * * * * * * *
+     * @param word palavra que vai ser adicionada
+     * @param x posição X inicial da palavra
+     * @param y posição Y inicial da palavra
      */
     private void placeHorizontal(String word, int x, int y){
         for (int i = 0; i < word.length(); i++) {
@@ -173,15 +208,17 @@ public class Board {
         }
     }
 
-
-    //Coloca a string na posição vertical dada uma posição inicial
-    /*
-         * * * S * * * * *
-         * * * T * * * * *
-         * * * R * * * * *
-         * * * I * * * * *
-         * * * N * * * * *
-         * * * G * * * * *
+    /**
+     * Coloca a string na posição vertical dada uma posição inicial
+     *      * * * S * * * * *
+     *      * * * T * * * * *
+     *      * * * R * * * * *
+     *      * * * I * * * * *
+     *      * * * N * * * * *
+     *      * * * G * * * * *
+     * @param word palavra que vai ser adicionada
+     * @param x posição X inicial da palavra
+     * @param y posição Y inicial da palavra
      */
     private void placeVertical(String word, int x, int y){
         for (int i = 0; i < word.length(); i++) {
@@ -190,16 +227,18 @@ public class Board {
         }
     }
 
-    //Dada uma posição colocar a string na matriz 'grid' no formato de diagonal principal
-    /*
-         * S * * * * * * *
-         * * T * * * * * *
-         * * * R * * * * *
-         * * * * I * * * *
-         * * * * * N * * *
-         * * * * * * G * *
+    /**
+     * Coloca a string na posição diagonal dada uma posição inicial
+     *      * S * * * * * * *
+     *      * * T * * * * * *
+     *      * * * R * * * * *
+     *      * * * * I * * * *
+     *      * * * * * N * * *
+     *      * * * * * * G * *
+     * @param word palavra que vai ser adicionada
+     * @param x posição X inicial da palavra
+     * @param y posição Y inicial da palavra
      */
-
     private void placeDiagonal(String word, int x, int y){
         for (int i = 0; i < word.length(); i++) {
             grid[x][y] = word.charAt(i);
@@ -208,14 +247,17 @@ public class Board {
         }
     }
 
-    //Dada uma posição colocar a string na matriz 'grid' no formato de diagonal secundaria
-    /*
-        * * * * * * * S *
-        * * * * * * T * *
-        * * * * * R * * *
-        * * * * I * * * *
-        * * * N * * * * *
-        * * G * * * * * *
+    /**
+     * Coloca a string na posição diagonal secundaria dada uma posição inicial
+     *      * * * * * * * S *
+     *      * * * * * * T * *
+     *      * * * * * R * * *
+     *      * * * * I * * * *
+     *      * * * N * * * * *
+     *      * * G * * * * * *
+     * @param word palavra que vai ser adicionada
+     * @param x posição X inicial da palavra
+     * @param y posição Y inicial da palavra
      */
     private void placeSecondaryDiagonal(String word, int x, int y){
         for (int i = 0; i < word.length(); i++) {
@@ -225,7 +267,11 @@ public class Board {
         }
     }
 
-    //Define se a string recebida vai ser invertida, e retorna a string (invertida ou não, 50% de chance)
+    /**
+     * Define se a string recebida vai ser invertida, e retorna a string
+     * @param word palavra original
+     * @return retorna a nova palavra, invertida ou não
+     */
     private String reverseWord(String word){
         int reverse = ThreadLocalRandom.current().nextInt(0, 2);
 
@@ -233,7 +279,9 @@ public class Board {
         else return new StringBuilder(word).reverse().toString();
     }
 
-    //Mostra a matriz no console
+    /**
+     * Mostra a matriz no console
+     */
     private void showBoard(){
         for (int i = 0; i < DIMENSION; i++) {
             System.out.println(Arrays.toString(grid[i]));
