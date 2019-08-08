@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Board {
@@ -28,7 +27,6 @@ public class Board {
      * Preenche os espaços vazios da matriz com letras aleatorias
      */
     private void fillEmptySpace(){
-        Random random = new Random();
         for (int i = 0; i < DIMENSION; i++) {
             for (int j = 0; j < DIMENSION; j++) {
                 if(grid[i][j] == 0) grid[i][j] = ' ';// Agora preenche com um espaço vazio para questoes de teste e visualização
