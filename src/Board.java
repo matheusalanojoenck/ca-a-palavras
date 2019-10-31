@@ -31,7 +31,7 @@ public class Board {
             for (int j = 0; j < DIMENSION; j++) {
                 if(grid[i][j] == 0) grid[i][j] = ' ';// Agora preenche com um espaço vazio para questoes de teste e visualização
                 //Descomentar a linha de baixo para colocar letras aleatorias
-                //if(grid[i][j] == 0) gridButton[i][j] = (char)ThreadLocalRandom.current().nextInt(65, 91);
+                //if(grid[i][j] == 0) grid[i][j] = (char)ThreadLocalRandom.current().nextInt(65, 91);
             }
         }
     }
