@@ -1,3 +1,6 @@
+import Backend.Board;
+import UI.GameScreen;
+
 import java.util.ArrayList;
 
 public class Game{
@@ -11,6 +14,8 @@ public class Game{
         wordCollection.add("MONITOR");
         wordCollection.add("CADEIRA");
 
-        Board board = new Board(15, wordCollection);
+        int dimension = 16;
+        Board board = new Board(dimension, wordCollection);
+        GameScreen game = new GameScreen(board.getGrid());
     }
 }
